@@ -1,0 +1,205 @@
+[
+    {
+        "id": "8b5cd655227f4403",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "7c907b1012fed948",
+        "type": "mqtt-broker",
+        "name": "Mosquitto Local",
+        "broker": "mqtt",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "9d364c04e7712b60",
+        "type": "debug",
+        "z": "8b5cd655227f4403",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 400,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "ae15710ee840bf10",
+        "type": "mqtt in",
+        "z": "8b5cd655227f4403",
+        "name": "Mosquitto Local",
+        "topic": "kampus/labiot/telemetri",
+        "qos": "2",
+        "datatype": "json",
+        "broker": "7c907b1012fed948",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 180,
+        "y": 160,
+        "wires": [
+            [
+                "9d364c04e7712b60"
+            ]
+        ]
+    },
+    {
+        "id": "dcdb45262e511789",
+        "type": "switch",
+        "z": "8b5cd655227f4403",
+        "name": "",
+        "property": "payload.suhu",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "gt",
+                "v": "31",
+                "vt": "num"
+            },
+            {
+                "t": "lte",
+                "v": "31",
+                "vt": "num"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 370,
+        "y": 380,
+        "wires": [
+            [
+                "e0c8bbffd1b79a08"
+            ],
+            [
+                "1f40d4947ea50636"
+            ]
+        ]
+    },
+    {
+        "id": "e0c8bbffd1b79a08",
+        "type": "change",
+        "z": "8b5cd655227f4403",
+        "name": "Nyalakan LED Indikator",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{   \"led\": 1 }",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 610,
+        "y": 340,
+        "wires": [
+            [
+                "a422ceb064319890"
+            ]
+        ]
+    },
+    {
+        "id": "a422ceb064319890",
+        "type": "mqtt out",
+        "z": "8b5cd655227f4403",
+        "name": "",
+        "topic": "kampus/labiot/kendali",
+        "qos": "1",
+        "retain": "false",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "7c907b1012fed948",
+        "x": 880,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "2454c094ded3a657",
+        "type": "mqtt in",
+        "z": "8b5cd655227f4403",
+        "name": "",
+        "topic": "kampus/labiot/kendali",
+        "qos": "1",
+        "datatype": "auto-detect",
+        "broker": "7c907b1012fed948",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 180,
+        "y": 380,
+        "wires": [
+            [
+                "dcdb45262e511789"
+            ]
+        ]
+    },
+    {
+        "id": "1f40d4947ea50636",
+        "type": "change",
+        "z": "8b5cd655227f4403",
+        "name": "Padamkan LED Indikator",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{   \"led\": 0 }",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 610,
+        "y": 440,
+        "wires": [
+            [
+                "a422ceb064319890"
+            ]
+        ]
+    }
+]
